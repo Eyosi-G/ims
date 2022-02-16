@@ -33,7 +33,7 @@ class ProductController {
     is_original,
     year_made_in
   ) {
-    await db.query(`update_product_item($1, $2, $3, $4, $5, $6, $7, $8)`, [
+    await db.query(`select update_product_item($1, $2, $3, $4, $5, $6, $7, $8)`, [
       id,
       name,
       description,

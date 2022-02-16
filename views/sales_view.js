@@ -2,11 +2,13 @@ const inquirer = require("inquirer");
 const SalesController = require("../controllers/sales_controller");
 const ProductController = require("../controllers/product_controller");
 const CustomerController = require("../controllers/customer_controller");
+const StockController = require("../controllers/stock_controller");
 class SalesView {
   constructor() {
     this._salesController = new SalesController();
     this._productController = new ProductController();
     this._customerController = new CustomerController();
+    this._stockController = new StockController()
   }
 
   async _customersChoices() {
@@ -45,14 +47,14 @@ class SalesView {
 
   async insertSales() {
     try {
-      const products = await this._productController.getProducts();
-      const { productId } = await inquirer.prompt({
+      const stocks = await this._stockController.getAllStocks()
+      const { stockId } = await inquirer.prompt({
         type: "list",
-        name: "productId",
+        name: "stockId",
         message: "Products In Stock",
-        choices: products.map((product) => ({
-          name: product.name,
-          value: product.id,
+        choices: stocks.map((stock) => ({
+          name: `[StockID] ${stock.id} [ProductName] ${stock.product.name} [Supplier] ${stock.supplier.companyName}`,
+          value: stock.id,
         })),
       });
       const { unitPrice, quantity } = await inquirer.prompt([
@@ -66,7 +68,7 @@ class SalesView {
       await this._salesController.createSales(
         quantity,
         unitPrice,
-        productId,
+        stockId,
         customerId
       );
       ui.updateBottomBar("successfully inserted \n");
@@ -77,7 +79,7 @@ class SalesView {
 
   async updateSales() {
     const sales = await this._salesController.getSales();
-    const products = await this._productController.getProducts();
+    const stocks = await this._stockController.getAllStocks()
 
     const { saleId } = await inquirer.prompt({
       type: "list",
@@ -88,20 +90,19 @@ class SalesView {
         value: sale.id,
       })),
     });
-    const { productId } = await inquirer.prompt({
+    const { stockId } = await inquirer.prompt({
       type: "list",
-      name: "productId",
+      name: "stockId",
       message: "Products In Stock",
-      choices: products.map((product) => ({
-        name: product.name,
-        value: product.id,
+      choices: stocks.map((stock) => ({
+        name: `[StockID] ${stock.id} [ProductName] ${stock.product.name} [Supplier] ${stock.supplier.companyName}`,
+        value: stock.id,
       })),
     });
     const { unitPrice, quantity } = await inquirer.prompt([
       { name: "unitPrice", message: "Unit Price" },
       { name: "quantity", message: "Quantity" },
     ]);
-
     const customerId = await this._customersChoices();
     const ui = new inquirer.ui.BottomBar();
     ui.updateBottomBar("loading ...");
@@ -109,7 +110,7 @@ class SalesView {
       saleId,
       quantity,
       unitPrice,
-      productId,
+      stockId,
       customerId
     );
     ui.updateBottomBar("updated successfully \n");
