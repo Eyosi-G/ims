@@ -53,7 +53,7 @@ class SalesView {
         name: "stockId",
         message: "Products In Stock",
         choices: stocks.map((stock) => ({
-          name: `[StockID] ${stock.id} [ProductName] ${stock.product.name} [Supplier] ${stock.supplier.companyName}`,
+          name: `[StockID]-${stock.id}, [ProductName]-${stock.product.name}, [Supplier]-${stock.supplier.companyName}`,
           value: stock.id,
         })),
       });
@@ -78,59 +78,67 @@ class SalesView {
   }
 
   async updateSales() {
-    const sales = await this._salesController.getSales();
-    const stocks = await this._stockController.getAllStocks()
-
-    const { saleId } = await inquirer.prompt({
-      type: "list",
-      name: "saleId",
-      message: "Sales",
-      choices: sales.map((sale) => ({
-        name: `[Sales ID]-${sale.id} [Name]-${sale.product.name} [Unit Price]-${sale.unitPrice} [Quanitity]-${sale.quantity}`,
-        value: sale.id,
-      })),
-    });
-    const { stockId } = await inquirer.prompt({
-      type: "list",
-      name: "stockId",
-      message: "Products In Stock",
-      choices: stocks.map((stock) => ({
-        name: `[StockID] ${stock.id} [ProductName] ${stock.product.name} [Supplier] ${stock.supplier.companyName}`,
-        value: stock.id,
-      })),
-    });
-    const { unitPrice, quantity } = await inquirer.prompt([
-      { name: "unitPrice", message: "Unit Price" },
-      { name: "quantity", message: "Quantity" },
-    ]);
-    const customerId = await this._customersChoices();
-    const ui = new inquirer.ui.BottomBar();
-    ui.updateBottomBar("loading ...");
-    await this._salesController.updateSales(
-      saleId,
-      quantity,
-      unitPrice,
-      stockId,
-      customerId
-    );
-    ui.updateBottomBar("updated successfully \n");
+    try{
+      const sales = await this._salesController.getSales();
+      const stocks = await this._stockController.getAllStocks()
+  
+      const { saleId } = await inquirer.prompt({
+        type: "list",
+        name: "saleId",
+        message: "Sales",
+        choices: sales.map((sale) => ({
+          name: `[Sales ID]-${sale.id} [Name]-${sale.product.name} [Unit Price]-${sale.unitPrice} [Quanitity]-${sale.quantity}`,
+          value: sale.id,
+        })),
+      });
+      const { stockId } = await inquirer.prompt({
+        type: "list",
+        name: "stockId",
+        message: "Products In Stock",
+        choices: stocks.map((stock) => ({
+          name: `[StockID]-${stock.id}, [ProductName]-${stock.product.name}, [Supplier]-${stock.supplier.companyName}`,
+          value: stock.id,
+        })),
+      });
+      const { unitPrice, quantity } = await inquirer.prompt([
+        { name: "unitPrice", message: "Unit Price" },
+        { name: "quantity", message: "Quantity" },
+      ]);
+      const customerId = await this._customersChoices();
+      const ui = new inquirer.ui.BottomBar();
+      ui.updateBottomBar("loading ...");
+      await this._salesController.updateSales(
+        saleId,
+        quantity,
+        unitPrice,
+        stockId,
+        customerId
+      );
+      ui.updateBottomBar("updated successfully \n")
+    }catch(e){
+      console.log(e)
+    }
   }
 
   async deleteSales() {
-    const sales = await this._salesController.getSales();
-    const { saleId } = await inquirer.prompt({
-      type: "list",
-      name: "saleId",
-      message: "Sales",
-      choices: sales.map((sale) => ({
-        name: sale.product.name,
-        value: sale.id,
-      })),
-    });
-    const ui = new inquirer.ui.BottomBar();
-    ui.updateBottomBar("loading ...");
-    await this._salesController.deleteSale(saleId);
-    ui.updateBottomBar("successfully deleted \n");
+    try{
+      const sales = await this._salesController.getSales();
+      const { saleId } = await inquirer.prompt({
+        type: "list",
+        name: "saleId",
+        message: "Sales",
+        choices: sales.map((sale) => ({
+          name: `[Sales ID]-${sale.id} [Name]-${sale.product.name} [Unit Price]-${sale.unitPrice} [Quanitity]-${sale.quantity}`,
+          value: sale.id,
+        })),
+      });
+      const ui = new inquirer.ui.BottomBar();
+      ui.updateBottomBar("loading ...");
+      await this._salesController.deleteSale(saleId);
+      ui.updateBottomBar("successfully deleted \n");
+    }catch(e){
+      console.log('Deleting Sales Failed !')
+    }
   }
 
   async displaySales() {

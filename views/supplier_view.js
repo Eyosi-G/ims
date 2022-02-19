@@ -97,16 +97,20 @@ class SupplierView {
       ui.updateBottomBar("");
       suppliers.map((supplier) => this.displaySupplier(supplier));
     } catch (e) {
-      console.log("");
+      console.log("Finding Supplier Failed !");
     }
   }
 
   async displaySuppliers() {
-    const ui = new inquirer.ui.BottomBar();
-    ui.updateBottomBar("loading ...");
-    const suppliers = await this.supplierController.getSuppliers();
-    ui.updateBottomBar("");
-    suppliers.map((supplier) => this.displaySupplier(supplier));
+    try{
+      const ui = new inquirer.ui.BottomBar();
+      ui.updateBottomBar("loading ...");
+      const suppliers = await this.supplierController.getSuppliers();
+      ui.updateBottomBar("");
+      suppliers.map((supplier) => this.displaySupplier(supplier));
+    }catch(e){
+      console.log(e)
+    }
   }
 }
 

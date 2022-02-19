@@ -100,7 +100,7 @@ class ProductView {
       );
       ui.updateBottomBar("product created \n");
     } catch (e) {
-      console.log(e);
+      console.log('Creating Product Failed !')
     }
   }
 
@@ -164,8 +164,7 @@ class ProductView {
       );
       ui.updateBottomBar("product updated \n");
     } catch (e) {
-      console.log(e);
-      console.log("update failed !");
+      console.log('Updating Product Failed !')
     }
   }
 
@@ -184,7 +183,7 @@ class ProductView {
         ui.updateBottomBar("product deleted");
       }
     } catch (e) {
-      console.log("operation failed !");
+      console.log('Deleting Product Failed !')
     }
   }
 
@@ -203,8 +202,7 @@ class ProductView {
         this._displayFullProduct(product);
       });
     } catch (e) {
-      console.log(e)
-      console.log("operation failed !");
+      console.log('Searching Product Failed !')
     }
   }
 
@@ -218,7 +216,7 @@ class ProductView {
         this._displayFullProduct(product);
       });
     } catch (e) {
-      console.log(e);
+      console.log('Displaying Product Lists Failed !')
     }
   }
 
@@ -233,7 +231,7 @@ class ProductView {
         this._displayProduct(product);
       });
     } catch (e) {
-      console.log(e);
+      console.log('Displaying Popular Products For Kids Failed !')
     }
   }
 
@@ -248,7 +246,7 @@ class ProductView {
         this._displayProduct(product);
       });
     } catch (e) {
-      console.log(e);
+      console.log('Displaying Popular Products For Adults Failed !')
     }
   }
 }

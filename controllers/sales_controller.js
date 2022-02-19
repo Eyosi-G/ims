@@ -12,8 +12,8 @@ class SalesController {
   }
   async updateSales(salesId, quantity, unitPrice, stockId, customerId) {
     return await db.query(
-      `update sales set quantity=$1, unit_price=$2, stock_id=$3, customer_id=$4 where sales_id=$5`,
-      [quantity, unitPrice, stockId, customerId, salesId]
+      `select update_sales($1, $2, $3, $4, $5)`,
+      [salesId, quantity, unitPrice, stockId, customerId]
     );
   }
   async getSales() {
